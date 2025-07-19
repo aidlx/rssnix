@@ -60,7 +60,6 @@ func UpdateFeed(name string, deleteFiles bool) {
 	}
 	os.MkdirAll(Config.FeedDirectory+"/"+name, 0777)
 	for _, item := range feed.Items {
-
 		articlePath := Config.FeedDirectory + "/" + name + "/" + truncateString(strings.ReplaceAll(item.Title, "/", ""), maxFileNameLength)
 		if _, err := os.Stat(articlePath); err == nil {
 			log.Debug("Article " + articlePath + " already exists - skipping download")
