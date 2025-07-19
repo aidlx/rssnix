@@ -4,6 +4,7 @@
 
 * [Demonstration](#demonstration)
 * [Installation](#installation)
+* [Packages](#packages)
 * [Flags](#flags)
 * [Config](#config)
 
@@ -16,6 +17,10 @@
 You need to have Go >=1.19 installed.
 
 `git clone https://github.com/h2337/rssnix --depth=1 && cd rssnix && go install`
+
+## Packages
+
+<a href="https://aur.archlinux.org/packages/rssnix-git">Archlinux AUR Package</a>
 
 ## Flags
 
