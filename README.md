@@ -46,4 +46,4 @@ feed_directory = ~/rssnix
 CNN-Tech = http://rss.cnn.com/rss/edition_technology.rss
 HackerNews = https://news.ycombinator.com/rss
 ```
-(Tip: ranger is another great canditate for `viewer`)
+(Tip: ranger is another great candidate for `viewer`)
