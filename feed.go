@@ -36,7 +36,7 @@ func UpdateFeed(name string) {
 			continue
 		}
 		defer file.Close()
-		_, err = file.WriteString(item.Content)
+		_, err = file.WriteString(item.Description + "\n" + item.Link + "\n" + item.Published + "\n" + item.Content)
 		if err != nil {
 			log.Error("Failed to write content to a file for article titled '" + item.Title + "'")
 			continue
