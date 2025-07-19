@@ -79,8 +79,8 @@ func UpdateFeed(name string, deleteFiles bool) {
 			continue
 		}
 		downloadCount++
-		NewLinkPath := Config.FeedDirectory + "/" + newArticleDirectory + "/" + truncateString(strings.ReplaceAll(item.Title, "/", ""), maxFileNameLength)
-		err = os.Symlink(articlePath, NewLinkPath)
+		newLinkPath := Config.FeedDirectory + "/" + newArticleDirectory + "/" + truncateString(strings.ReplaceAll(item.Title, "/", ""), maxFileNameLength)
+		err = os.Symlink(articlePath, newLinkPath)
 		if err != nil {
 			log.Error("Could not create symlink for newly downloaded article " + articlePath)
 		}
