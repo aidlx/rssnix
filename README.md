@@ -20,7 +20,7 @@ You need to have Go >=1.19 installed.
 
 ## Packages
 
-<a href="https://aur.archlinux.org/packages/rssnix-git">Archlinux AUR Package</a>
+<a href="https://aur.archlinux.org/packages/rssnix-git">Arch Linux AUR Package</a>
 
 ## Flags
 
