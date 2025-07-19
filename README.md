@@ -38,6 +38,12 @@ You need to have Go >=1.19 installed.
 `add [feed name] [feed url]`
 - Adds a new feed to the config file
 
+`import [OPML URL or file path]`
+- Imports feeds from OPML file
+
+`version`
+- Prints the rssnix version
+
 ## Config
 
 Config file is expected to be at `~/.config/rssnix/config.ini`.

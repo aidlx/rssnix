@@ -6,6 +6,7 @@ require (
 	github.com/PuerkitoBio/goquery v1.5.1 // indirect
 	github.com/andybalholm/cascadia v1.1.0 // indirect
 	github.com/cpuguy83/go-md2man/v2 v2.0.2 // indirect
+	github.com/gilliek/go-opml v1.0.0 // indirect
 	github.com/go-ini/ini v1.67.0 // indirect
 	github.com/json-iterator/go v1.1.10 // indirect
 	github.com/mmcdole/gofeed v1.1.3 // indirect

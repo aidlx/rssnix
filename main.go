@@ -4,11 +4,37 @@ import (
 	"errors"
 	"os"
 	"os/exec"
+	"strings"
 	"syscall"
 
+	"github.com/gilliek/go-opml/opml"
+	"github.com/go-ini/ini"
 	log "github.com/sirupsen/logrus"
 	"github.com/urfave/cli/v2"
 )
+
+const Version = "0.2.0"
+
+func addFeed(name string, url string) error {
+	homePath, err := os.UserHomeDir()
+	if err != nil {
+		log.Error("Failed to get home path")
+		os.Exit(1)
+	}
+	cfg, err := ini.Load(homePath + "/.config/rssnix/config.ini")
+	for _, key := range cfg.Section("feeds").Keys() {
+		if key.Name() == name {
+			return errors.New("Feed named '" + name + "' already exists")
+		}
+	}
+	file, err := os.OpenFile(homePath+"/.config/rssnix/config.ini", os.O_APPEND|os.O_WRONLY, 0644)
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+	_, err = file.WriteString("\n" + name + " = " + url)
+	return err
+}
 
 func main() {
 	syscall.Umask(0)
@@ -75,18 +101,68 @@ func main() {
 					if cCtx.Args().Len() != 2 {
 						return errors.New("exactly two arguments are required, first being feed name, second being URL")
 					}
-					homePath, err := os.UserHomeDir()
-					if err != nil {
-						log.Error("Failed to get home path")
-						os.Exit(1)
+					return addFeed(cCtx.Args().Get(0), cCtx.Args().Get(1))
+				},
+			},
+			{
+				Name:    "import",
+				Aliases: []string{"i"},
+				Usage:   "import an OPML file",
+				Action: func(cCtx *cli.Context) error {
+					if cCtx.Args().Len() != 1 {
+						return errors.New("argument specifying OPML file path or URL is required")
 					}
-					file, err := os.OpenFile(homePath+"/.config/rssnix/config.ini", os.O_APPEND|os.O_WRONLY, 0644)
+					doc, err := opml.NewOPMLFromFile(cCtx.Args().Get(0))
 					if err != nil {
-						return err
+						doc, err = opml.NewOPMLFromURL(cCtx.Args().Get(0))
+						if err != nil {
+							return err
+						}
 					}
-					defer file.Close()
-					_, err = file.WriteString("\n" + cCtx.Args().Get(0) + " = " + cCtx.Args().Get(1))
-					return err
+					for _, outline := range doc.Body.Outlines {
+						if len(outline.XMLURL) > 0 {
+							var title string
+							if len(outline.Title) > 0 {
+								title = outline.Title
+							} else if len(outline.Text) > 0 {
+								title = outline.Text
+							} else {
+								continue
+							}
+							err = addFeed(strings.ReplaceAll(title, " ", "-"), outline.XMLURL)
+							if err != nil {
+								log.Error("Failed to add feed titled '" + title + "', error: " + err.Error())
+								continue
+							}
+						}
+						for _, innerOutline := range outline.Outlines {
+							if len(innerOutline.XMLURL) > 0 {
+								var title string
+								if len(outline.Title) > 0 {
+									title = outline.Title
+								} else if len(outline.Text) > 0 {
+									title = outline.Text
+								} else {
+									continue
+								}
+								err = addFeed(strings.ReplaceAll(title, " ", "-"), innerOutline.XMLURL)
+								if err != nil {
+									log.Error("Failed to add feed titled '" + title + "', error: " + err.Error())
+									continue
+								}
+							}
+						}
+					}
+					return nil
+				},
+			},
+			{
+				Name:    "version",
+				Aliases: []string{"v"},
+				Usage:   "display the version",
+				Action: func(cCtx *cli.Context) error {
+					log.Info(Version)
+					return nil
 				},
 			},
 		},
