@@ -13,7 +13,7 @@ import (
 	"github.com/urfave/cli/v2"
 )
 
-const Version = "0.2.1"
+const Version = "0.2.2"
 
 func addFeed(name string, url string) error {
 	homePath, err := os.UserHomeDir()
