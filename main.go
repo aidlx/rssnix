@@ -4,12 +4,14 @@ import (
 	"errors"
 	"os"
 	"os/exec"
+	"syscall"
 
 	log "github.com/sirupsen/logrus"
 	"github.com/urfave/cli/v2"
 )
 
 func main() {
+	syscall.Umask(0)
 	LoadConfig()
 
 	app := &cli.App{
@@ -78,7 +80,7 @@ func main() {
 						log.Error("Failed to get home path")
 						os.Exit(1)
 					}
-					file, err := os.OpenFile(homePath+"/.config/rssnix/config.ini", os.O_APPEND|os.O_WRONLY, 644)
+					file, err := os.OpenFile(homePath+"/.config/rssnix/config.ini", os.O_APPEND|os.O_WRONLY, 0644)
 					if err != nil {
 						return err
 					}

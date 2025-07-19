@@ -3,6 +3,7 @@ package main
 import (
 	"os"
 	"strconv"
+	"strings"
 	"sync"
 
 	"github.com/mmcdole/gofeed"
@@ -20,7 +21,7 @@ var isAllUpdate bool
 
 func DeleteFeedFiles(name string) {
 	os.RemoveAll(Config.FeedDirectory + "/" + name)
-	os.Mkdir(Config.FeedDirectory+"/"+name, 0644)
+	os.MkdirAll(Config.FeedDirectory+"/"+name, 0777)
 }
 
 func UpdateFeed(name string) {
@@ -29,7 +30,7 @@ func UpdateFeed(name string) {
 	feed, _ := fp.ParseURL(Config.Feeds[slices.IndexFunc(Config.Feeds, func(f Feed) bool { return f.Name == name })].URL)
 	DeleteFeedFiles(name)
 	for _, item := range feed.Items {
-		file, err := os.Create(Config.FeedDirectory + "/" + name + "/" + item.Title)
+		file, err := os.Create(Config.FeedDirectory + "/" + name + "/" + strings.ReplaceAll(item.Title, "/", ""))
 		if err != nil {
 			log.Error("Failed to create a file for article titled '" + item.Title + "'")
 			continue

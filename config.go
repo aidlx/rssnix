@@ -33,7 +33,7 @@ func LoadConfig() {
 	if _, err := os.Stat(homePath + "/.config/rssnix/config.ini"); errors.Is(err, os.ErrNotExist) {
 		log.Warn("Config file does not exist, creating...")
 
-		os.MkdirAll(homePath+"/.config/rssnix", 0644)
+		os.MkdirAll(homePath+"/.config/rssnix", 0777)
 		file, err := os.Create(homePath + "/.config/rssnix/config.ini")
 		if err != nil {
 			log.Error("Failed to create a config file")
@@ -57,7 +57,7 @@ func LoadConfig() {
 	if strings.HasPrefix(Config.FeedDirectory, "~") {
 		Config.FeedDirectory = homePath + Config.FeedDirectory[1:]
 	}
-	os.MkdirAll(Config.FeedDirectory, 0644)
+	os.MkdirAll(Config.FeedDirectory, 0777)
 	Config.Viewer = cfg.Section("settings").Key("viewer").String()
 	for _, key := range cfg.Section("feeds").Keys() {
 		Config.Feeds = append(Config.Feeds, Feed{key.Name(), key.String()})
