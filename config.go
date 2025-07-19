@@ -60,6 +60,6 @@ func LoadConfig() {
 	os.MkdirAll(Config.FeedDirectory, 0644)
 	Config.Viewer = cfg.Section("settings").Key("viewer").String()
 	for _, key := range cfg.Section("feeds").Keys() {
-		Config.Feeds = append(Config.Feeds, Feed{key.String(), cfg.Section("feeds").Key(key.String()).String()})
+		Config.Feeds = append(Config.Feeds, Feed{key.Name(), key.String()})
 	}
 }
