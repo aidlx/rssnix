@@ -27,13 +27,13 @@ You need to have Go >=1.19 installed.
 `config`
 - Opens config file with `$EDITOR`
 
-`update [feed]`
-- If [feed] argument is given and is space-delimited list of feeds, then these feeds are updated
-- If no [feed] argument is given then all feeds are updated
+`update [feed name]`
+- If [feed name] argument is given and is space-delimited list of feeds, then these feeds are updated
+- If no [feed name] argument is given then all feeds are updated
 
-`open [feed]`
-- If [feed] argument is given then the said feed's directory is opened with the configured viewer
-- If no [feed] argument is given then the root feeds directory is opened with the configured viewer
+`open [feed name]`
+- If [feed name] argument is given then the said feed's directory is opened with the configured viewer
+- If no [feed name] argument is given then the root feeds directory is opened with the configured viewer
 
 `add [feed name] [feed url]`
 - Adds a new feed to the config file
