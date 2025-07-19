@@ -10,7 +10,7 @@
 
 ## Demonstration
 
-![Demo](https://raw.githubusercontent.com/h2337/file-hosting/master/rssnix-demo.gif?raw=true)
+![Demo](https://github.com/h2337/file-hosting/blob/3613fb4d60f0fc64ce77d8c56279bcd6bdf769a3/rssnix-demo2.gif?raw=true)
 
 ## Installation
 
