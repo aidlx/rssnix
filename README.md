@@ -17,7 +17,7 @@
 
 `open [feed]`
 - If [feed] argument is given then the said feed's directory is opened with the configured viewer
-- If no [feed] argument is given then the general feeds directory is opened with the configured viewer
+- If no [feed] argument is given then the root feeds directory is opened with the configured viewer
 
 `add [feed name] [feed url]`
 - Adds a new feed to the config file
@@ -33,5 +33,5 @@ feed_directory = ~/rssnix
 CNN-Tech = http://rss.cnn.com/rss/edition_technology.rss
 HackerNews = https://news.ycombinator.com/rss
 
-(Tip: ranger is another great canditate for default_viewer)
 ```
+(Tip: ranger is another great canditate for default_viewer)
