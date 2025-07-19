@@ -63,15 +63,29 @@ func main() {
 				},
 			},
 			{
+				Name:    "refetch",
+				Aliases: []string{"r"},
+				Usage:   "delete and refetch given feed(s) or all feeds if no argument is given",
+				Action: func(cCtx *cli.Context) error {
+					if cCtx.Args().Len() == 0 {
+						UpdateAllFeeds(true)
+					}
+					for i := 0; i < cCtx.Args().Len(); i++ {
+						UpdateFeed(cCtx.Args().Get(i), true)
+					}
+					return nil
+				},
+			},
+			{
 				Name:    "update",
 				Aliases: []string{"u"},
 				Usage:   "update given feed(s) or all feeds if no argument is given",
 				Action: func(cCtx *cli.Context) error {
 					if cCtx.Args().Len() == 0 {
-						UpdateAllFeeds()
+						UpdateAllFeeds(false)
 					}
 					for i := 0; i < cCtx.Args().Len(); i++ {
-						UpdateFeed(cCtx.Args().Get(i))
+						UpdateFeed(cCtx.Args().Get(i), false)
 					}
 					return nil
 				},
