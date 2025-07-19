@@ -3,6 +3,7 @@ package main
 import (
 	"errors"
 	"os"
+	"strings"
 
 	"github.com/go-ini/ini"
 	log "github.com/sirupsen/logrus"
@@ -53,6 +54,10 @@ func LoadConfig() {
 
 	Config = Configuration{}
 	Config.FeedDirectory = cfg.Section("settings").Key("feed_directory").String()
+	if strings.HasPrefix(Config.FeedDirectory, "~") {
+		Config.FeedDirectory = homePath + Config.FeedDirectory[1:]
+	}
+	os.MkdirAll(Config.FeedDirectory, 0744)
 	Config.Viewer = cfg.Section("settings").Key("viewer").String()
 	for _, key := range cfg.Section("feeds").Keys() {
 		Config.Feeds = append(Config.Feeds, Feed{key.String(), cfg.Section("feeds").Key(key.String()).String()})

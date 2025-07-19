@@ -31,8 +31,7 @@ func main() {
 					cmd := exec.Command(editor, homePath+"/.config/rssnix/config.ini")
 					cmd.Stdin = os.Stdin
 					cmd.Stdout = os.Stdout
-					err = cmd.Run()
-					return err
+					return cmd.Run()
 				},
 			},
 			{
@@ -47,6 +46,23 @@ func main() {
 						UpdateFeed(cCtx.Args().Get(i))
 					}
 					return nil
+				},
+			},
+			{
+				Name:    "open",
+				Aliases: []string{"o"},
+				Usage:   "open given feed's directory or root feeds directory if no argument is given",
+				Action: func(cCtx *cli.Context) error {
+					var path string
+					if cCtx.Args().Len() == 0 {
+						path = Config.FeedDirectory
+					} else {
+						path = Config.FeedDirectory + "/" + cCtx.Args().Get(0)
+					}
+					cmd := exec.Command(Config.Viewer, path)
+					cmd.Stdin = os.Stdin
+					cmd.Stdout = os.Stdout
+					return cmd.Run()
 				},
 			},
 		},
