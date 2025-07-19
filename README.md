@@ -1,3 +1,12 @@
+<img align="right" src="https://github.com/h2337/file-hosting/blob/master/rssnix-logo.png?raw=true">
+
+## TOC
+
+* [Demonstration](#demonstration)
+* [Installation](#installation)
+* [Flags](#flags)
+* [Config](#config)
+
 ## Demonstration
 
 ![Demo](https://raw.githubusercontent.com/h2337/file-hosting/master/rssnix-demo.gif?raw=true)
@@ -32,6 +41,5 @@ feed_directory = ~/rssnix
 [feeds]
 CNN-Tech = http://rss.cnn.com/rss/edition_technology.rss
 HackerNews = https://news.ycombinator.com/rss
-
 ```
 (Tip: ranger is another great canditate for `viewer`)
