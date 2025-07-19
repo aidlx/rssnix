@@ -9,18 +9,18 @@ import (
 )
 
 var defaultConfigContent = `[settings]
-feed_directory = ~/rssnix
 viewer = vim
-max_concurrent_fetch = 5
+feed_directory = ~/rssnix
 
 [feeds]`
 
-type Config struct {
-	FeedDirectory      string
-	Viewer             string
-	MaxConcurrentFetch int
-	Feeds              []Feed
+type Configuration struct {
+	FeedDirectory string
+	Viewer        string
+	Feeds         []Feed
 }
+
+var Config Configuration
 
 func LoadConfig() {
 	homePath, err := os.UserHomeDir()
@@ -50,5 +50,11 @@ func LoadConfig() {
 	}
 
 	cfg, err := ini.Load(homePath + "/.config/rssnix/config.ini")
-	log.Info(cfg)
+
+	Config = Configuration{}
+	Config.FeedDirectory = cfg.Section("settings").Key("feed_directory").String()
+	Config.Viewer = cfg.Section("settings").Key("viewer").String()
+	for _, key := range cfg.Section("feeds").Keys() {
+		Config.Feeds = append(Config.Feeds, Feed{key.String(), cfg.Section("feeds").Key(key.String()).String()})
+	}
 }
