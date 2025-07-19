@@ -1,12 +1,12 @@
-# Demonstration
+## Demonstration
 
 ![Demo](https://raw.githubusercontent.com/h2337/file-hosting/master/rssnix-demo.gif?raw=true)
 
-# Installation
+## Installation
 
 `git clone https://github.com/h2337/rssnix --depth=1 && cd rssnix && go install`
 
-# Command line flags
+## Flags
 
 `config`
 - Opens config file with $EDITOR
@@ -22,8 +22,8 @@
 `add [feed name] [feed url]`
 - Adds a new feed to the config file
 
-# Sample config file
-
+## Config
+Sample config file:
 ```
 [settings]
 default_viewer = vim
