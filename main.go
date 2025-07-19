@@ -67,6 +67,7 @@ func main() {
 				Aliases: []string{"r"},
 				Usage:   "delete and refetch given feed(s) or all feeds if no argument is given",
 				Action: func(cCtx *cli.Context) error {
+					InitialiseNewArticleDirectory()
 					if cCtx.Args().Len() == 0 {
 						UpdateAllFeeds(true)
 					}
@@ -81,6 +82,7 @@ func main() {
 				Aliases: []string{"u"},
 				Usage:   "update given feed(s) or all feeds if no argument is given",
 				Action: func(cCtx *cli.Context) error {
+					InitialiseNewArticleDirectory()
 					if cCtx.Args().Len() == 0 {
 						UpdateAllFeeds(false)
 					}

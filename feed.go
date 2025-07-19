@@ -19,6 +19,8 @@ type Feed struct {
 
 var wg sync.WaitGroup
 var isAllUpdate bool
+
+const newArticleDirectory = "new"
 const maxFileNameLength = 255
 
 func truncateString(s string, n int) string {
@@ -61,7 +63,7 @@ func UpdateFeed(name string, deleteFiles bool) {
 
 		articlePath := Config.FeedDirectory + "/" + name + "/" + truncateString(strings.ReplaceAll(item.Title, "/", ""), maxFileNameLength)
 		if _, err := os.Stat(articlePath); err == nil {
-			log.Info("Article " + articlePath + " already exists - skipping download")
+			log.Debug("Article " + articlePath + " already exists - skipping download")
 			skipCount++
 			continue
 		}
@@ -77,6 +79,11 @@ func UpdateFeed(name string, deleteFiles bool) {
 			continue
 		}
 		downloadCount++
+		NewLinkPath := Config.FeedDirectory + "/" + newArticleDirectory + "/" + truncateString(strings.ReplaceAll(item.Title, "/", ""), maxFileNameLength)
+		err = os.Symlink(articlePath, NewLinkPath)
+		if err != nil {
+			log.Error("Could not create symlink for newly downloaded article " + articlePath)
+		}
 	}
 	log.Info(strconv.Itoa(downloadCount) + " articles fetched from feed '" + name + "' (" + strconv.Itoa(skipCount) + " already seen, " + strconv.Itoa(len(feed.Items)) + " total in feed)")
 	if isAllUpdate {
