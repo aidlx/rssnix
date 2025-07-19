@@ -13,6 +13,8 @@
 
 ## Installation
 
+You need to have Go 1.19 installed.
+
 `git clone https://github.com/h2337/rssnix --depth=1 && cd rssnix && go install`
 
 ## Flags
