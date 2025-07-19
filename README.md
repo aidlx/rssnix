@@ -34,4 +34,4 @@ CNN-Tech = http://rss.cnn.com/rss/edition_technology.rss
 HackerNews = https://news.ycombinator.com/rss
 
 ```
-(Tip: ranger is another great canditate for default_viewer)
+(Tip: ranger is another great canditate for `viewer`)
