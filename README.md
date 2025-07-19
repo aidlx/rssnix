@@ -18,7 +18,7 @@
 ## Flags
 
 `config`
-- Opens config file with $EDITOR
+- Opens config file with `$EDITOR`
 
 `update [feed]`
 - If [feed] argument is given and is space-delimited list of feeds, then these feeds are updated
