@@ -19,17 +19,6 @@ type Feed struct {
 
 var wg sync.WaitGroup
 var isAllUpdate bool
-
-/*
-Based on the table in https://en.wikipedia.org/wiki/Comparison_of_file_systems#Limits
-
-	the majority of filesystems have a limit of 255.
-
-	Some of them refer to "bytes" and others refer to "UTF-8 characters".
-	Ideally we'd like to take as much as that as possible but we run the risk of
-	truncating at a point which leaves us with an incomplete UTF8 code point
-	representation. Instead, we need a UTF8-safe truncate - we define that function below.
-*/
 const maxFileNameLength = 255
 
 func truncateString(s string, n int) string {
