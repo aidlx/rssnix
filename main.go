@@ -13,7 +13,7 @@ import (
 	"github.com/urfave/cli/v2"
 )
 
-const Version = "0.2.0"
+const Version = "0.2.1"
 
 func addFeed(name string, url string) error {
 	homePath, err := os.UserHomeDir()
@@ -138,10 +138,10 @@ func main() {
 						for _, innerOutline := range outline.Outlines {
 							if len(innerOutline.XMLURL) > 0 {
 								var title string
-								if len(outline.Title) > 0 {
-									title = outline.Title
-								} else if len(outline.Text) > 0 {
-									title = outline.Text
+								if len(innerOutline.Title) > 0 {
+									title = innerOutline.Title
+								} else if len(innerOutline.Text) > 0 {
+									title = innerOutline.Text
 								} else {
 									continue
 								}
