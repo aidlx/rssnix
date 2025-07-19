@@ -45,6 +45,9 @@ You need to have Go >=1.19 installed.
 `import [OPML URL or file path]`
 - Imports feeds from OPML file
 
+`refetch [feed name]`
+- delete and refetch given feed(s) or all feeds if no argument is given
+
 `version`
 - Prints the rssnix version
 
