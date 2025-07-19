@@ -32,10 +32,14 @@
 - Adds a new feed to the config file
 
 ## Config
+
+Config file is expected to be at `~/.config/rssnix/config.ini`.
+
 Sample config file:
+
 ```
 [settings]
-default_viewer = vim
+viewer = vim
 feed_directory = ~/rssnix
 
 [feeds]
