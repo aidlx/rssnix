@@ -1,6 +1,8 @@
 package main
 
 import (
+	"strconv"
+
 	log "github.com/sirupsen/logrus"
 )
 
@@ -9,10 +11,13 @@ type Feed struct {
 	Address string
 }
 
-func UpdateAllFeeds() {
-	log.Info("All feeds updated")
+func UpdateFeed(feed string) {
+	log.Info("Updating feed '" + feed + "'")
+	log.Info(strconv.Itoa(1) + " articles fetched from feed '" + feed + "'")
 }
 
-func UpdateFeed(feed string) {
-	log.Info(feed + " updated")
+func UpdateAllFeeds() {
+	for _, feed := range Config.Feeds {
+		UpdateFeed(feed.Name)
+	}
 }
