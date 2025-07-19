@@ -27,7 +27,14 @@ func DeleteFeedFiles(name string) {
 func UpdateFeed(name string) {
 	log.Info("Updating feed '" + name + "'")
 	fp := gofeed.NewParser()
-	feed, _ := fp.ParseURL(Config.Feeds[slices.IndexFunc(Config.Feeds, func(f Feed) bool { return f.Name == name })].URL)
+	feed, err := fp.ParseURL(Config.Feeds[slices.IndexFunc(Config.Feeds, func(f Feed) bool { return f.Name == name })].URL)
+	if err != nil {
+		log.Error("Failed to fetch the feed '" + name + "'")
+		if isAllUpdate {
+			wg.Done()
+		}
+		return
+	}
 	DeleteFeedFiles(name)
 	for _, item := range feed.Items {
 		file, err := os.Create(Config.FeedDirectory + "/" + name + "/" + strings.ReplaceAll(item.Title, "/", ""))
