@@ -65,10 +65,32 @@ func main() {
 					return cmd.Run()
 				},
 			},
+			{
+				Name:    "add",
+				Aliases: []string{"a"},
+				Usage:   "add a given feed to config",
+				Action: func(cCtx *cli.Context) error {
+					if cCtx.Args().Len() != 2 {
+						return errors.New("exactly two arguments are required, first being feed name, second being URL")
+					}
+					homePath, err := os.UserHomeDir()
+					if err != nil {
+						log.Error("Failed to get home path")
+						os.Exit(1)
+					}
+					file, err := os.OpenFile(homePath+"/.config/rssnix/config.ini", os.O_APPEND|os.O_WRONLY, 644)
+					if err != nil {
+						return err
+					}
+					defer file.Close()
+					_, err = file.WriteString("\n" + cCtx.Args().Get(0) + " = " + cCtx.Args().Get(1))
+					return err
+				},
+			},
 		},
 	}
 
 	if err := app.Run(os.Args); err != nil {
-		log.Fatal(err)
+		log.Error(err)
 	}
 }
