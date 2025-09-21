@@ -2,8 +2,10 @@ package main
 
 import (
 	"errors"
+	"fmt"
 	"os"
 	"os/exec"
+	"path/filepath"
 	"strings"
 	"syscall"
 
@@ -13,32 +15,50 @@ import (
 	"github.com/urfave/cli/v2"
 )
 
-const Version = "0.3.0"
+const Version = "0.4.0"
 
-func addFeed(name string, url string) error {
-	homePath, err := os.UserHomeDir()
-	if err != nil {
-		log.Error("Failed to get home path")
-		os.Exit(1)
+func addFeed(name, url string) error {
+	sanitizedName := strings.TrimSpace(name)
+	sanitizedURL := strings.TrimSpace(url)
+
+	if sanitizedName == "" {
+		return errors.New("feed name cannot be empty")
 	}
-	cfg, err := ini.Load(homePath + "/.config/rssnix/config.ini")
-	for _, key := range cfg.Section("feeds").Keys() {
-		if key.Name() == name {
-			return errors.New("Feed named '" + name + "' already exists")
-		}
+	if sanitizedURL == "" {
+		return errors.New("feed URL cannot be empty")
 	}
-	file, err := os.OpenFile(homePath+"/.config/rssnix/config.ini", os.O_APPEND|os.O_WRONLY, 0644)
+
+	cfgPath, err := configFilePath()
 	if err != nil {
 		return err
 	}
-	defer file.Close()
-	_, err = file.WriteString("\n" + name + " = " + url)
-	return err
+
+	cfg, err := ini.Load(cfgPath)
+	if err != nil {
+		return fmt.Errorf("load config for update: %w", err)
+	}
+
+	feedsSection := cfg.Section("feeds")
+	if feedsSection.HasKey(sanitizedName) {
+		return fmt.Errorf("feed named '%s' already exists", sanitizedName)
+	}
+
+	feedsSection.Key(sanitizedName).SetValue(sanitizedURL)
+
+	if err := cfg.SaveTo(cfgPath); err != nil {
+		return fmt.Errorf("persist feed configuration: %w", err)
+	}
+
+	Config.Feeds = append(Config.Feeds, Feed{Name: sanitizedName, URL: sanitizedURL})
+
+	return nil
 }
 
 func main() {
 	syscall.Umask(0)
-	LoadConfig()
+	if err := LoadConfig(); err != nil {
+		log.Fatal(err)
+	}
 
 	app := &cli.App{
 		Commands: []*cli.Command{
@@ -51,12 +71,11 @@ func main() {
 					if len(editor) == 0 || !ok {
 						return errors.New("$EDITOR environment variable is not set")
 					}
-					homePath, err := os.UserHomeDir()
+					cfgPath, err := configFilePath()
 					if err != nil {
-						log.Error("Failed to get home path")
-						os.Exit(1)
+						return err
 					}
-					cmd := exec.Command(editor, homePath+"/.config/rssnix/config.ini")
+					cmd := exec.Command(editor, cfgPath)
 					cmd.Stdin = os.Stdin
 					cmd.Stdout = os.Stdout
 					return cmd.Run()
@@ -67,12 +86,18 @@ func main() {
 				Aliases: []string{"r"},
 				Usage:   "delete and refetch given feed(s) or all feeds if no argument is given",
 				Action: func(cCtx *cli.Context) error {
-					InitialiseNewArticleDirectory()
+					if err := InitialiseNewArticleDirectory(); err != nil {
+						return err
+					}
 					if cCtx.Args().Len() == 0 {
 						UpdateAllFeeds(true)
+						return nil
 					}
 					for i := 0; i < cCtx.Args().Len(); i++ {
-						UpdateFeed(cCtx.Args().Get(i), true)
+						name := cCtx.Args().Get(i)
+						if _, err := UpdateFeed(name, true); err != nil {
+							log.Error(err)
+						}
 					}
 					return nil
 				},
@@ -82,12 +107,18 @@ func main() {
 				Aliases: []string{"u"},
 				Usage:   "update given feed(s) or all feeds if no argument is given",
 				Action: func(cCtx *cli.Context) error {
-					InitialiseNewArticleDirectory()
+					if err := InitialiseNewArticleDirectory(); err != nil {
+						return err
+					}
 					if cCtx.Args().Len() == 0 {
 						UpdateAllFeeds(false)
+						return nil
 					}
 					for i := 0; i < cCtx.Args().Len(); i++ {
-						UpdateFeed(cCtx.Args().Get(i), false)
+						name := cCtx.Args().Get(i)
+						if _, err := UpdateFeed(name, false); err != nil {
+							log.Error(err)
+						}
 					}
 					return nil
 				},
@@ -97,11 +128,9 @@ func main() {
 				Aliases: []string{"o"},
 				Usage:   "open given feed's directory or root feeds directory if no argument is given",
 				Action: func(cCtx *cli.Context) error {
-					var path string
-					if cCtx.Args().Len() == 0 {
-						path = Config.FeedDirectory
-					} else {
-						path = Config.FeedDirectory + "/" + cCtx.Args().Get(0)
+					path := Config.FeedDirectory
+					if cCtx.Args().Len() > 0 {
+						path = filepath.Join(Config.FeedDirectory, cCtx.Args().Get(0))
 					}
 					cmd := exec.Command(Config.Viewer, path)
 					cmd.Stdin = os.Stdin
@@ -145,9 +174,8 @@ func main() {
 							} else {
 								continue
 							}
-							err = addFeed(strings.ReplaceAll(title, " ", "-"), outline.XMLURL)
-							if err != nil {
-								log.Error("Failed to add feed titled '" + title + "', error: " + err.Error())
+							if err := addFeed(strings.ReplaceAll(title, " ", "-"), outline.XMLURL); err != nil {
+								log.Errorf("Failed to add feed titled '%s': %v", title, err)
 								continue
 							}
 						}
@@ -161,9 +189,8 @@ func main() {
 								} else {
 									continue
 								}
-								err = addFeed(strings.ReplaceAll(title, " ", "-"), innerOutline.XMLURL)
-								if err != nil {
-									log.Error("Failed to add feed titled '" + title + "', error: " + err.Error())
+								if err := addFeed(strings.ReplaceAll(title, " ", "-"), innerOutline.XMLURL); err != nil {
+									log.Errorf("Failed to add feed titled '%s': %v", title, err)
 									continue
 								}
 							}

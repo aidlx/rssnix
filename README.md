@@ -18,14 +18,6 @@ You need to have Go >=1.19 installed.
 
 `git clone https://github.com/h2337/rssnix --depth=1 && cd rssnix && go install`
 
-## Packages
-
-<a href="https://aur.archlinux.org/packages/rssnix">Arch Linux AUR Package (build newest version)</a> <img src="https://img.shields.io/aur/version/rssnix?color=green" alt="AUR"> 
-
-<a href="https://aur.archlinux.org/packages/rssnix-bin">Arch Linux AUR Package (binary newest version)</a> <img src="https://img.shields.io/aur/version/rssnix-bin?color=green" alt="AUR"> 
-
-<a href="https://aur.archlinux.org/packages/rssnix-git">Arch Linux AUR Package (build from git)</a> <img src="https://img.shields.io/aur/version/rssnix-git?color=green" alt="AUR"> 
-
 ## Flags
 
 `config`
