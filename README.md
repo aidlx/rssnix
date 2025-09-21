@@ -1,4 +1,4 @@
-<img align="right" src="https://raw.githubusercontent.com/h2337/rssnix/refs/heads/master/logo.svg">
+<img align="right" src="https://raw.githubusercontent.com/aidlx/rssnix/refs/heads/master/logo.svg">
 
 ## TOC
 
@@ -10,13 +10,13 @@
 
 ## Demonstration
 
-![Demo](https://raw.githubusercontent.com/h2337/rssnix/refs/heads/master/demo.gif)
+![Demo](https://raw.githubusercontent.com/aidlx/rssnix/refs/heads/master/demo.gif)
 
 ## Installation
 
 You need to have Go >=1.19 installed.
 
-`git clone https://github.com/h2337/rssnix --depth=1 && cd rssnix && go install`
+`git clone https://github.com/aidlx/rssnix --depth=1 && cd rssnix && go install`
 
 ## Flags
 

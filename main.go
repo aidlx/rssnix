@@ -7,7 +7,6 @@ import (
 	"os/exec"
 	"path/filepath"
 	"strings"
-	"syscall"
 
 	"github.com/gilliek/go-opml/opml"
 	"github.com/go-ini/ini"
@@ -15,7 +14,7 @@ import (
 	"github.com/urfave/cli/v2"
 )
 
-const Version = "0.4.0"
+const Version = "0.4.1"
 
 func addFeed(name, url string) error {
 	sanitizedName := strings.TrimSpace(name)
@@ -55,7 +54,7 @@ func addFeed(name, url string) error {
 }
 
 func main() {
-	syscall.Umask(0)
+	setUmask(0)
 	if err := LoadConfig(); err != nil {
 		log.Fatal(err)
 	}

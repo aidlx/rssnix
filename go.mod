@@ -1,4 +1,4 @@
-module github.com/h2337/rssnix
+module github.com/aidlx/rssnix
 
 go 1.19
 
