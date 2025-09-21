@@ -1,0 +1,29 @@
+<svg width="200" height="80" viewBox="0 0 200 80" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Darker gradient -->
+    <linearGradient id="darkGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#0066cc;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#004499;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- Subtle glow -->
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Main text -->
+  <text x="100" y="45" 
+        font-family="'Consolas', 'Monaco', monospace" 
+        font-size="42" 
+        font-weight="bold"
+        font-style="italic"
+        text-anchor="middle" 
+        fill="url(#darkGradient)"
+        filter="url(#glow)"
+        letter-spacing="2">rssnix</text>
+</svg>

@@ -1,4 +1,4 @@
-<img align="right" src="https://github.com/h2337/file-hosting/blob/master/rssnix-logo.png?raw=true">
+<img align="right" src="https://raw.githubusercontent.com/h2337/rssnix/refs/heads/master/logo.svg">
 
 ## TOC
 
