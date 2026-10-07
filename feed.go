@@ -99,7 +99,10 @@ func UpdateFeed(name string, deleteFiles bool) (FeedUpdateResult, error) {
 		}
 	}
 
-	feedDir := filepath.Join(Config.FeedDirectory, name)
+	feedDir, err := filepath.Abs(filepath.Join(Config.FeedDirectory, name))
+	if err != nil {
+		return result, fmt.Errorf("resolve feed directory for %q: %w", name, err)
+	}
 	if err := os.MkdirAll(feedDir, 0o755); err != nil {
 		return result, fmt.Errorf("ensure feed directory for %q: %w", name, err)
 	}
